@@ -1,11 +1,29 @@
 {
-  "name": "proy1-web",
+  "name": "balon-de-oro-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "REST API for Balón de Oro history and ratings",
+  "main": "api/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js",
+    "migrate": "psql $DATABASE_URL -f src/infrastructure/db/migrations/001_init.sql",
+    "seed": "psql $DATABASE_URL -f src/infrastructure/db/migrations/002_seed.sql"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "dependencies": {
+    "cloudinary": "^2.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.0.1",
+    "js-yaml": "^4.1.0",
+    "multer": "^1.4.5-lts.1",
+    "pg": "^8.11.5",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
 }
