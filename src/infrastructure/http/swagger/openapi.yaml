@@ -1,0 +1,279 @@
+openapi: 3.0.0
+info:
+  title: Balón de Oro API
+  description: REST API for Balón de Oro history and ratings
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        200:
+          description: OK
+  /players:
+    get:
+      summary: Get all players
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: nationality
+          in: query
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of players
+    post:
+      summary: Create a player
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                nationality:
+                  type: string
+                club:
+                  type: string
+                position:
+                  type: string
+                  enum: [GK, DEF, MID, FWD]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: Created
+  /players/{id}:
+    get:
+      summary: Get player by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Player data
+        404:
+          description: Not found
+    put:
+      summary: Update player
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                nationality:
+                  type: string
+                club:
+                  type: string
+                position:
+                  type: string
+                  enum: [GK, DEF, MID, FWD]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Not found
+    delete:
+      summary: Delete player
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: No Content
+        404:
+          description: Not found
+  /ceremonies:
+    get:
+      summary: Get all ceremonies
+      responses:
+        200:
+          description: List of ceremonies
+    post:
+      summary: Create ceremony
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                year:
+                  type: integer
+                winnerId:
+                  type: integer
+      responses:
+        201:
+          description: Created
+        409:
+          description: Conflict
+  /ceremonies/{year}:
+    get:
+      summary: Get ceremony by year
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Ceremony with top 10 nominees
+        404:
+          description: Not found
+    put:
+      summary: Update ceremony
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                winnerId:
+                  type: integer
+      responses:
+        200:
+          description: Updated
+        404:
+          description: Not found
+    delete:
+      summary: Delete ceremony
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: No Content
+        404:
+          description: Not found
+  /ceremonies/{year}/nominations:
+    get:
+      summary: Get nominations for a ceremony
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: List of nominations
+    post:
+      summary: Add nomination to a ceremony
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId:
+                  type: integer
+                rank:
+                  type: integer
+                votesReceived:
+                  type: integer
+      responses:
+        201:
+          description: Created
+        409:
+          description: Conflict
+  /nominations/{id}:
+    delete:
+      summary: Delete nomination
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: No Content
+  /nominations/{id}/rating:
+    get:
+      summary: Get ratings for a nomination
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Rating statistics and list
+    post:
+      summary: Add rating to a nomination
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score:
+                  type: integer
+                comment:
+                  type: string
+      responses:
+        201:
+          description: Created
