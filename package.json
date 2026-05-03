@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node api/index.js",
     "dev": "nodemon api/index.js",
-    "migrate": "psql $DATABASE_URL -f src/infrastructure/db/migrations/001_init.sql",
-    "seed": "psql $DATABASE_URL -f src/infrastructure/db/migrations/002_seed.sql"
+    "migrate": "node scripts/migrate.js",
+    "seed": "node scripts/seed.js",
+    "migrate:seed": "node scripts/migrate.js && node scripts/seed.js"
   },
   "keywords": [],
   "author": "",
