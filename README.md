@@ -62,8 +62,19 @@ The tech stack chosen (Node.js, Express, pg, Cloudinary) is robust and highly pe
 ## Live API
 Production: https://proy1-balon-de-oro-api.vercel.app/
 
-## Screenshot
-<!-- TODO: agregar screenshot real del Swagger UI en /api/docs -->
+## Screenshots
+
+### Swagger UI (API Documentation)
+![Swagger Documentation](./assets/swagger.png)
+
+### API Endpoints
+![Routes](./assets/routes.png)
+
+### Players - Get All
+![Get All Players](./assets/getall.png)
+
+### Health Check
+![Health Check](./assets/health.png)
 
 ## Frontend Repository
 [Link to frontend repo](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
