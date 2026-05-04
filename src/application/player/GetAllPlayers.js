@@ -4,8 +4,8 @@ class GetAllPlayers {
   }
 
   async execute(filters) {
-    const { page = 1, limit = 1000, q, nationality, sort = 'name', order = 'asc' } = filters;
-    return await this.playerRepository.findAll({ page, limit, q, nationality, sort, order });
+    const { q, nationality, sort = 'name', order = 'asc' } = filters;
+    return await this.playerRepository.findAll({ q, nationality, sort, order });
   }
 }
 
