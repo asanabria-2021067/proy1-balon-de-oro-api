@@ -76,6 +76,11 @@ Production: https://proy1-balon-de-oro-api.vercel.app/
 ### Health Check
 ![Health Check](./assets/health.png)
 
+## Data Sources
+
+Balón de Oro historical data (winners and nominees 1956-2025) sourced from:
+- [DAZN - Lista de ganadores y palmarés del Balón de Oro](https://www.dazn.com/es-ES/news/f%C3%BAtbol/balon-de-oro-lista-de-ganadores-y-palmares-del-premio-al-mejor-futbolista-del-mundo-de-france-football/yk3dalhzw9tu133fh8hrsrolu)
+
 ## Frontend Repository
 [Link to frontend repo](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
 
