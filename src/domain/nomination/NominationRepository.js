@@ -9,6 +9,10 @@ class NominationRepository {
     throw new Error("Method 'findByCeremony()' must be implemented.");
   }
 
+  async findByPlayer(playerId) {
+    throw new Error("Method 'findByPlayer()' must be implemented.");
+  }
+
   async findById(id) {
     throw new Error("Method 'findById()' must be implemented.");
   }
