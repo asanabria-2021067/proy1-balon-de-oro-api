@@ -16,7 +16,23 @@ class NominationController {
 
   async create(req, res, next) {
     try {
-      const nomination = await this.addNomination.execute(req.params.year, req.body);
+      const { jugadorId, año, puesto, reassign, playerId, year, rank } = req.body;
+      
+      // Handle both Spanish and English field names
+      const data = {
+        playerId: jugadorId || playerId || req.body.player_id,
+        year: año || year || req.params.year,
+        rank: puesto || rank || req.body.rank,
+        reassign: reassign === true || reassign === 'true'
+      };
+
+      if (!data.year) {
+        const error = new Error("Year (año) is required");
+        error.status = 400;
+        throw error;
+      }
+
+      const nomination = await this.addNomination.execute(data);
       res.status(201).json(nomination);
     } catch (err) {
       next(err);
