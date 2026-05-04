@@ -7,6 +7,7 @@ const playerRoutes = require('./infrastructure/http/routes/playerRoutes');
 const ceremonyRoutes = require('./infrastructure/http/routes/ceremonyRoutes');
 const { nominationRouter, nestedNominationRouter } = require('./infrastructure/http/routes/nominationRoutes');
 const ratingRoutes = require('./infrastructure/http/routes/ratingRoutes');
+const statsRoutes = require('./infrastructure/http/routes/statsRoutes');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api/ceremonies', ceremonyRoutes);
 app.use('/api/ceremonies/:year/nominations', nestedNominationRouter);
 app.use('/api/nominations', nominationRouter);
 app.use('/api/nominations/:id', ratingRoutes);
+app.use('/api/stats', statsRoutes);
 
 app.use(errorHandler);
 
