@@ -59,8 +59,11 @@ CORS (Cross-Origin Resource Sharing) is a security feature that restricts how re
 ## Tech Stack Reflection
 The tech stack chosen (Node.js, Express, pg, Cloudinary) is robust and highly performant for a serverless environment. Using raw SQL provides total control over queries and avoids the overhead of an ORM, which is beneficial for learning and fine-tuning. However, for larger projects, the lack of type safety from TypeScript and the manual mapping of SQL results to domain entities can become tedious. I would definitely use this stack again for lightweight, high-performance APIs or when strict control over the database layer is required.
 
+## Live API
+Production: https://proy1-balon-de-oro-api.vercel.app/
+
 ## Screenshot
-![API Documentation Placeholder](https://via.placeholder.com/800x400?text=Swagger+UI+Screenshot)
+<!-- TODO: agregar screenshot real del Swagger UI en /api/docs -->
 
 ## Frontend Repository
 [Link to frontend repo](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
