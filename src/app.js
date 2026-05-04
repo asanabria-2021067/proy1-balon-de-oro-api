@@ -17,7 +17,7 @@ setupSwagger(app);
 
 app.get('/', (req, res) => {
   res.json({
-    message: '🏆 Bienvenido al backend de Balón de Oro',
+    message: 'Bienvenido al backend de Balón de Oro',
     version: '1.0.0',
     docs: '/api/docs',
     status: 'ok'

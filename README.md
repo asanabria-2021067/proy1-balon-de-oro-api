@@ -78,3 +78,6 @@ Production: https://proy1-balon-de-oro-api.vercel.app/
 
 ## Frontend Repository
 [Link to frontend repo](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
+
+## Swagger run on hosted backend
+[Link to Swagger hosted](https://proy1-balon-de-oro-api.vercel.app/api/docs/)
