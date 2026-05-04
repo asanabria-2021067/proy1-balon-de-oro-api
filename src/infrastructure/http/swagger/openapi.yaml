@@ -277,3 +277,25 @@ paths:
       responses:
         201:
           description: Created
+  /stats/countries:
+    get:
+      summary: Get Ballon d'Or statistics by country
+      responses:
+        200:
+          description: Array of countries with wins and unique player count
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    country:
+                      type: string
+                      example: Argentina
+                    wins:
+                      type: integer
+                      example: 8
+                    players:
+                      type: integer
+                      example: 1
