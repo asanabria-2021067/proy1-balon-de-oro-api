@@ -13,6 +13,10 @@ class NominationRepository {
     throw new Error("Method 'findByPlayer()' must be implemented.");
   }
 
+  async findByYear(year) {
+    throw new Error("Method 'findByYear()' must be implemented.");
+  }
+
   async findById(id) {
     throw new Error("Method 'findById()' must be implemented.");
   }

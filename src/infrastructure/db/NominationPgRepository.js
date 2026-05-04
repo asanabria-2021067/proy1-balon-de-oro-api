@@ -34,6 +34,19 @@ class NominationPgRepository extends NominationRepository {
     }));
   }
 
+  async findByYear(year) {
+    const query = `
+      SELECT n.*, p.name as player_name, p.photo_url as player_photo_url, p.nationality as player_nationality, p.club as player_club, p.position as player_position
+      FROM nominations n
+      JOIN ceremonies c ON n.ceremony_id = c.id
+      JOIN players p ON n.player_id = p.id
+      WHERE c.year = $1
+      ORDER BY n.rank ASC
+    `;
+    const { rows } = await pool.query(query, [year]);
+    return rows.map(this._mapToDomainWithPlayer);
+  }
+
   async findById(id) {
     const { rows } = await pool.query('SELECT * FROM nominations WHERE id = $1', [id]);
     return rows.length ? this._mapToDomain(rows[0]) : null;

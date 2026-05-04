@@ -13,14 +13,8 @@ class GetCeremonyByYear {
       throw error;
     }
 
-    const nominations = await this.nominationRepository.findByCeremony(ceremony.id);
-    
-    // For each nomination, get player info and average rating
-    // This logic might be better handled in the repository for performance, 
-    // but here we are orchestrating in the application layer as per Hexagonal.
-    // However, for pure Hexagonal, the repository should return what we need if it's a specific domain requirement.
-    // I'll assume the nominationRepository returns joined data or I'll map it here.
-    
+    const nominations = await this.nominationRepository.findByYear(year);
+
     const detailedNominations = await Promise.all(nominations.map(async (nom) => {
       const averageRating = await this.ratingRepository.getAverageByNomination(nom.id);
       return {
