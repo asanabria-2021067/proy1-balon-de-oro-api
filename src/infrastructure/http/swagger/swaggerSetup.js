@@ -8,7 +8,12 @@ const setupSwagger = (app) => {
   const openapiContent = fs.readFileSync(openapiPath, 'utf8');
   const swaggerDocument = yaml.load(openapiContent);
 
-  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  const options = {
+    customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+    customSiteTitle: "Balón de Oro API Docs",
+  };
+
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 };
 
 module.exports = setupSwagger;
