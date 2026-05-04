@@ -1,7 +1,11 @@
+const AddNomination = require('../nomination/AddNomination');
+
 class UpdatePlayer {
-  constructor(playerRepository, imageUploader) {
+  constructor(playerRepository, imageUploader, ceremonyRepository, nominationRepository) {
     this.playerRepository = playerRepository;
     this.imageUploader = imageUploader;
+    this.addNomination = new AddNomination(ceremonyRepository, nominationRepository);
+    this.nominationRepository = nominationRepository;
   }
 
   async execute(id, playerData, imageFile) {
@@ -19,8 +23,36 @@ class UpdatePlayer {
       photoUrl = playerData.photoUrl;
     }
 
-    const { photoUrl: _ignored, ...rest } = playerData;
-    return await this.playerRepository.update(id, { ...rest, photoUrl });
+    const { photoUrl: _ignored, nominationYear, nominationRank, ...rest } = playerData;
+    const player = await this.playerRepository.update(id, { ...rest, photoUrl });
+
+    if (nominationYear && nominationRank) {
+      try {
+        const existingNominations = await this.nominationRepository.findByPlayer(id);
+        const nominationForYear = existingNominations.find(n => n.year == nominationYear);
+
+        if (nominationForYear && nominationForYear.rank != nominationRank) {
+          await this.nominationRepository.delete(nominationForYear.id);
+          await this.addNomination.execute({
+            playerId: id,
+            year: parseInt(nominationYear),
+            rank: parseInt(nominationRank),
+            reassign: true
+          });
+        } else if (!nominationForYear) {
+          await this.addNomination.execute({
+            playerId: id,
+            year: parseInt(nominationYear),
+            rank: parseInt(nominationRank),
+            reassign: true
+          });
+        }
+      } catch (error) {
+        console.error('Failed to update nomination:', error.message);
+      }
+    }
+
+    return player;
   }
 }
 

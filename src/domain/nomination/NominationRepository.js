@@ -25,6 +25,10 @@ class NominationRepository {
     throw new Error("Method 'save()' must be implemented.");
   }
 
+  async update(id, nomination) {
+    throw new Error("Method 'update()' must be implemented.");
+  }
+
   async delete(id) {
     throw new Error("Method 'delete()' must be implemented.");
   }

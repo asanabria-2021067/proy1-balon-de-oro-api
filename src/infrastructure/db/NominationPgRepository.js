@@ -63,6 +63,18 @@ class NominationPgRepository extends NominationRepository {
     return this._mapToDomain(rows[0]);
   }
 
+  async update(id, nomination) {
+    const query = `
+      UPDATE nominations
+      SET rank = COALESCE($2, rank), votes_received = COALESCE($3, votes_received), updated_at = NOW()
+      WHERE id = $1
+      RETURNING *
+    `;
+    const params = [id, nomination.rank, nomination.votesReceived];
+    const { rows } = await pool.query(query, params);
+    return rows.length ? this._mapToDomain(rows[0]) : null;
+  }
+
   async delete(id) {
     await pool.query('DELETE FROM nominations WHERE id = $1', [id]);
     return true;
