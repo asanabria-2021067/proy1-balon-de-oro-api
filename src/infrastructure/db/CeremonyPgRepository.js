@@ -1,5 +1,6 @@
 const CeremonyRepository = require('../../domain/ceremony/CeremonyRepository');
 const pool = require('./pool');
+const CloudinaryHelper = require('../cloudinary/cloudinaryHelper');
 
 class CeremonyPgRepository extends CeremonyRepository {
   async findAll() {
@@ -51,6 +52,7 @@ class CeremonyPgRepository extends CeremonyRepository {
   }
 
   _mapToDomainWithPlayer(row) {
+    const winnerPhotoUrl = row.winner_photo_url;
     return {
       id: row.id,
       year: row.year,
@@ -59,7 +61,8 @@ class CeremonyPgRepository extends CeremonyRepository {
       winner: {
         id: row.winner_id,
         name: row.winner_name,
-        photoUrl: row.winner_photo_url,
+        photoUrl: CloudinaryHelper.getProfileUrl(winnerPhotoUrl),
+        bannerUrl: CloudinaryHelper.getBannerUrl(winnerPhotoUrl),
         nationality: row.winner_nationality,
         club: row.winner_club,
         position: row.winner_position
