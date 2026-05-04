@@ -3,28 +3,40 @@ const pool = require('./pool');
 const CloudinaryHelper = require('../cloudinary/cloudinaryHelper');
 
 class PlayerPgRepository extends PlayerRepository {
-  async findAll({ q, nationality, sort, order }) {
-    let query = 'SELECT * FROM players WHERE 1=1';
+  async findAll({ q, nationality, sort, order, page = 1, limit = 12 }) {
+    let where = 'WHERE 1=1';
     const params = [];
 
     if (q) {
       params.push(`%${q}%`);
-      query += ` AND name ILIKE $${params.length}`;
+      where += ` AND name ILIKE $${params.length}`;
     }
-
     if (nationality) {
       params.push(nationality);
-      query += ` AND nationality = $${params.length}`;
+      where += ` AND nationality = $${params.length}`;
     }
 
     const allowedSort = ['name', 'nationality', 'club', 'position', 'created_at'];
     const sortField = allowedSort.includes(sort) ? sort : 'name';
-    const sortOrder = (order && order.toLowerCase() === 'desc') ? 'DESC' : 'ASC';
+    const sortOrder = order?.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
 
-    query += ` ORDER BY ${sortField} ${sortOrder}`;
+    const countResult = await pool.query(`SELECT COUNT(*) FROM players ${where}`, params);
+    const total = parseInt(countResult.rows[0].count);
 
-    const { rows } = await pool.query(query, params);
-    return rows.map(this._mapToDomain);
+    params.push(limit);
+    params.push((page - 1) * limit);
+    const { rows } = await pool.query(
+      `SELECT * FROM players ${where} ORDER BY ${sortField} ${sortOrder} LIMIT $${params.length - 1} OFFSET $${params.length}`,
+      params
+    );
+
+    return {
+      players: rows.map(this._mapToDomain.bind(this)),
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit)
+    };
   }
 
   async findById(id) {

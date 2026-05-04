@@ -18,7 +18,6 @@ class NominationController {
     try {
       const { jugadorId, año, puesto, reassign, playerId, year, rank } = req.body;
       
-      // Handle both Spanish and English field names
       const data = {
         playerId: jugadorId || playerId || req.body.player_id,
         year: año || year || req.params.year,

@@ -15,11 +15,9 @@ const nominationValidation = [
   body('votesReceived').optional().isInt({ min: 0 })
 ];
 
-// Flat routes
 router.post('/', nominationValidation, validate, (req, res, next) => nominationController.create(req, res, next));
 router.delete('/:id', (req, res, next) => nominationController.delete(req, res, next));
 
-// Ceremony-nested routes (will be mounted in app.js with appropriate prefix)
 const nestedRouter = express.Router({ mergeParams: true });
 nestedRouter.get('/', (req, res, next) => nominationController.getByCeremony(req, res, next));
 nestedRouter.post('/', nominationValidation, validate, (req, res, next) => nominationController.create(req, res, next));

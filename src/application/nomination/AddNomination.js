@@ -14,7 +14,6 @@ class AddNomination {
 
     const nominations = await this.nominationRepository.findByCeremony(ceremony.id);
     
-    // Check if player is already nominated for this year
     const duplicatePlayer = nominations.find(n => n.playerId === playerId);
     if (duplicatePlayer) {
       const error = new Error(`Player is already nominated for year ${year}`);
@@ -22,11 +21,9 @@ class AddNomination {
       throw error;
     }
 
-    // Check for occupied rank
     const occupiedRank = nominations.find(n => n.rank === rank);
     if (occupiedRank) {
       if (reassign) {
-        // If reassign is true, we delete the previous nomination for that rank
         await this.nominationRepository.delete(occupiedRank.id);
       } else {
         const error = new Error(`Position ${rank} is already occupied for year ${year}`);

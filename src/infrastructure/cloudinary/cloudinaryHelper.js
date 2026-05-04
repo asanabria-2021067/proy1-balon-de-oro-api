@@ -1,7 +1,7 @@
 class CloudinaryHelper {
   static transform(url, transformations) {
     if (!url || !url.includes('cloudinary.com')) return url;
-  
+    
     const parts = url.split('/upload/');
     if (parts.length !== 2) return url;
     

@@ -5,17 +5,13 @@ class CreatePlayer {
   }
 
   async execute(playerData, imageFile) {
-    let photoUrl = null;
+    let photoUrl = playerData.photoUrl || null;
     if (imageFile) {
       photoUrl = await this.imageUploader.upload(imageFile);
     }
 
-    const player = {
-      ...playerData,
-      photoUrl
-    };
-
-    return await this.playerRepository.save(player);
+    const { photoUrl: _ignored, ...rest } = playerData;
+    return await this.playerRepository.save({ ...rest, photoUrl });
   }
 }
 
