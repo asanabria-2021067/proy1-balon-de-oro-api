@@ -1,9 +1,9 @@
 const PlayerRepository = require('../../domain/player/PlayerRepository');
 const pool = require('./pool');
+const CloudinaryHelper = require('../cloudinary/cloudinaryHelper');
 
 class PlayerPgRepository extends PlayerRepository {
-  async findAll({ page, limit, q, nationality, sort, order }) {
-    const offset = (page - 1) * limit;
+  async findAll({ q, nationality, sort, order }) {
     let query = 'SELECT * FROM players WHERE 1=1';
     const params = [];
 
@@ -19,10 +19,9 @@ class PlayerPgRepository extends PlayerRepository {
 
     const allowedSort = ['name', 'nationality', 'club', 'position', 'created_at'];
     const sortField = allowedSort.includes(sort) ? sort : 'name';
-    const sortOrder = order.toLowerCase() === 'desc' ? 'DESC' : 'ASC';
+    const sortOrder = (order && order.toLowerCase() === 'desc') ? 'DESC' : 'ASC';
 
-    query += ` ORDER BY ${sortField} ${sortOrder} LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
-    params.push(limit, offset);
+    query += ` ORDER BY ${sortField} ${sortOrder}`;
 
     const { rows } = await pool.query(query, params);
     return rows.map(this._mapToDomain);
@@ -62,13 +61,16 @@ class PlayerPgRepository extends PlayerRepository {
   }
 
   _mapToDomain(row) {
+    const basePhotoUrl = row.photo_url;
     return {
       id: row.id,
       name: row.name,
       nationality: row.nationality,
       club: row.club,
       position: row.position,
-      photoUrl: row.photo_url,
+      photoUrl: CloudinaryHelper.getProfileUrl(basePhotoUrl),
+      bannerUrl: CloudinaryHelper.getBannerUrl(basePhotoUrl),
+      originalPhotoUrl: basePhotoUrl,
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };

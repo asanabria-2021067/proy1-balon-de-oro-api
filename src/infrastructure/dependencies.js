@@ -37,7 +37,7 @@ const imageUploader = new CloudinaryUploader();
 
 const playerController = new PlayerController(
   new GetAllPlayers(playerRepository),
-  new GetPlayerById(playerRepository),
+  new GetPlayerById(playerRepository, nominationRepository),
   new CreatePlayer(playerRepository, imageUploader),
   new UpdatePlayer(playerRepository, imageUploader),
   new DeletePlayer(playerRepository)

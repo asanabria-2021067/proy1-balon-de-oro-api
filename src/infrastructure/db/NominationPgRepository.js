@@ -1,5 +1,6 @@
 const NominationRepository = require('../../domain/nomination/NominationRepository');
 const pool = require('./pool');
+const CloudinaryHelper = require('../cloudinary/cloudinaryHelper');
 
 class NominationPgRepository extends NominationRepository {
   async findByCeremony(ceremonyId) {
@@ -12,6 +13,25 @@ class NominationPgRepository extends NominationRepository {
     `;
     const { rows } = await pool.query(query, [ceremonyId]);
     return rows.map(this._mapToDomainWithPlayer);
+  }
+
+  async findByPlayer(playerId) {
+    const query = `
+      SELECT n.*, c.year
+      FROM nominations n
+      JOIN ceremonies c ON n.ceremony_id = c.id
+      WHERE n.player_id = $1
+      ORDER BY c.year DESC
+    `;
+    const { rows } = await pool.query(query, [playerId]);
+    return rows.map(row => ({
+      id: row.id,
+      ceremonyId: row.ceremony_id,
+      playerId: row.player_id,
+      rank: row.rank,
+      votesReceived: row.votes_received,
+      year: row.year
+    }));
   }
 
   async findById(id) {
@@ -46,6 +66,7 @@ class NominationPgRepository extends NominationRepository {
   }
 
   _mapToDomainWithPlayer(row) {
+    const playerPhotoUrl = row.player_photo_url;
     return {
       id: row.id,
       ceremonyId: row.ceremony_id,
@@ -55,7 +76,8 @@ class NominationPgRepository extends NominationRepository {
       player: {
         id: row.player_id,
         name: row.player_name,
-        photoUrl: row.player_photo_url,
+        photoUrl: CloudinaryHelper.getProfileUrl(playerPhotoUrl),
+        bannerUrl: CloudinaryHelper.getBannerUrl(playerPhotoUrl),
         nationality: row.player_nationality,
         club: row.player_club,
         position: row.player_position
