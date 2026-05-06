@@ -1,88 +1,91 @@
-# Balón de Oro API
+# 🏆 API del Balón de Oro
 
-REST API for exploring the history of the Balón de Oro and rating nominees.
+API REST profesional que permite explorar la historia completa del prestigioso Balón de Oro, gestionar jugadores nominados y consultar ceremonias históricas desde 1956 hasta la actualidad.
 
-## Database Setup
+## 🗄️ Configuración de Base de Datos
 
-This project uses **Supabase** (PostgreSQL) with **Transaction Pooler** for serverless compatibility.
+Este proyecto utiliza **Supabase** (PostgreSQL) con **Transaction Pooler** para garantizar compatibilidad total con entornos serverless.
 
-### Why Transaction Pooler?
+### ¿Por qué Transaction Pooler?
 
-Vercel is serverless (stateless), so Transaction Pooler is required to avoid exhausting PostgreSQL connection limits. Each serverless function creates new connections, and without pooling, you'd quickly hit the connection limit.
+Vercel opera bajo una arquitectura serverless completamente stateless. En este paradigma, cada función serverless establece conexiones nuevas a PostgreSQL, lo que sin un sistema de pooling adecuado provocaría el agotamiento rápido del límite de conexiones simultáneas de la base de datos. Transaction Pooler resuelve este problema gestionando un pool de conexiones reutilizables, permitiendo que múltiples funciones serverless compartan conexiones de manera eficiente.
 
-### Setup Steps
+### Pasos de Configuración
 
-1. Create a free project at [supabase.com](https://supabase.com)
-2. Go to **Settings → Database → Connection string**
-3. Select **"Transaction pooler"** mode (port 6543)
-4. Copy the URI
-5. Replace `[YOUR-PASSWORD]` with your project password
-6. Paste it as `DATABASE_URL` in your `.env` file
-7. Run migrations:
+1. Crea un proyecto gratuito en [supabase.com](https://supabase.com)
+2. Navega a **Settings → Database → Connection string**
+3. Selecciona el modo **"Transaction pooler"** (puerto 6543)
+4. Copia la URI de conexión
+5. Reemplaza `[YOUR-PASSWORD]` con la contraseña de tu proyecto
+6. Pégala como `DATABASE_URL` en tu archivo `.env`
+7. Ejecuta las migraciones y seed inicial:
    ```bash
    npm run migrate
    npm run seed
    ```
 
-## CORS Configuration
+## 🔐 Configuración CORS
 
-CORS (Cross-Origin Resource Sharing) is a security feature that restricts how resources on a web page can be requested from another domain outside the domain from which the resource originated; it was configured to allow requests from the origin specified in the `ALLOWED_ORIGIN` environment variable (defaulting to `*`).
+CORS (Cross-Origin Resource Sharing) es un mecanismo de seguridad del navegador que restringe cómo los recursos de una página web pueden ser solicitados desde otro dominio diferente al que sirvió el recurso original. En esta API, CORS está configurado para permitir peticiones desde el origen especificado en la variable de entorno `ALLOWED_ORIGIN` (por defecto configurado en `*` para desarrollo, pero debe restringirse en producción).
 
-## How to run locally
+## 🚀 Cómo Ejecutar Localmente
 
-1.  **Clone the repository**
-2.  **Install dependencies**:
+1.  **Clona el repositorio**
+2.  **Instala las dependencias**:
     ```bash
     npm install
     ```
-3.  **Configure environment variables**:
-    Create a `.env` file based on `.env.example` and provide your Supabase and Cloudinary credentials.
-4.  **Database setup**:
-    Follow the [Database Setup](#database-setup) section above.
-5.  **Start the server**:
+3.  **Configura las variables de entorno**:
+    Crea un archivo `.env` basándote en `.env.example` y proporciona tus credenciales de Supabase y Cloudinary.
+4.  **Configura la base de datos**:
+    Sigue la sección [Configuración de Base de Datos](#configuración-de-base-de-datos) arriba.
+5.  **Inicia el servidor de desarrollo**:
     ```bash
     npm run dev
     ```
-6.  **Explore the API**:
-    Visit `http://localhost:3001/api/docs` to see the Swagger documentation.
+6.  **Explora la API**:
+    Visita `http://localhost:3001/api/docs` para ver la documentación interactiva de Swagger.
 
-## Implemented Challenges
-- [x] Hexagonal Architecture (Ports & Adapters)
-- [x] Pure JavaScript implementation (No TypeScript)
-- [x] Raw SQL with `pg` library (No ORM)
-- [x] Image handling with Cloudinary v2 SDK
-- [x] File uploads with `multer` (memoryStorage)
-- [x] Server-side validation with `express-validator`
-- [x] API documentation with Swagger (OpenAPI 3.0)
-- [x] Vercel serverless deployment support
+## ✨ Desafíos Implementados
+- [x] **Arquitectura Hexagonal** (Puertos y Adaptadores) - Separación clara entre lógica de negocio e infraestructura
+- [x] **JavaScript Puro** - Sin TypeScript, demostrando dominio de JavaScript ES6+
+- [x] **SQL Nativo** con librería `pg` - Sin ORM, control total sobre las consultas
+- [x] **Gestión de Imágenes** con Cloudinary v2 SDK - Upload, transformación y optimización
+- [x] **Upload de Archivos** con `multer` (memoryStorage) - Manejo eficiente en memoria
+- [x] **Validación Server-Side** con `express-validator` - Sanitización y validación robusta
+- [x] **Documentación API** con Swagger (OpenAPI 3.0) - Documentación interactiva profesional
+- [x] **Deployment Serverless** en Vercel - Escalabilidad automática y alta disponibilidad
 
-## Tech Stack Reflection
-The tech stack chosen (Node.js, Express, pg, Cloudinary) is robust and highly performant for a serverless environment. Using raw SQL provides total control over queries and avoids the overhead of an ORM, which is beneficial for learning and fine-tuning. However, for larger projects, the lack of type safety from TypeScript and the manual mapping of SQL results to domain entities can become tedious. I would definitely use this stack again for lightweight, high-performance APIs or when strict control over the database layer is required.
+## 🛠️ Reflexión sobre el Stack Tecnológico
 
-## Live API
-Production: https://proy1-balon-de-oro-api.vercel.app/
+El stack elegido (Node.js, Express, pg, Cloudinary) demuestra ser robusto y altamente performante en entornos serverless. Utilizar SQL nativo proporciona control total sobre las consultas y elimina el overhead de un ORM, lo cual resulta excelente para aprender los fundamentos y optimizar finamente cada query.
 
-## Screenshots
+Sin embargo, en proyectos más grandes, la ausencia de type safety de TypeScript y el mapeo manual de resultados SQL a entidades de dominio puede volverse tedioso y propenso a errores. Definitivamente volvería a usar este stack para APIs ligeras de alto rendimiento o cuando se requiera control estricto sobre la capa de base de datos, pero consideraría TypeScript + un query builder como Kysely para proyectos enterprise.
 
-### Swagger UI (API Documentation)
-![Swagger Documentation](./assets/swagger.png)
+## 🌐 API en Producción
+**Producción:** https://proy1-balon-de-oro-api.vercel.app/
 
-### API Endpoints
-![Routes](./assets/routes.png)
+## 📸 Capturas de Pantalla
 
-### Players - Get All
-![Get All Players](./assets/getall.png)
+### Swagger UI (Documentación Interactiva de la API)
+![Documentación Swagger](./assets/swagger.png)
+
+### Endpoints de la API
+![Rutas](./assets/routes.png)
+
+### Jugadores - Obtener Todos
+![Obtener Todos los Jugadores](./assets/getall.png)
 
 ### Health Check
 ![Health Check](./assets/health.png)
 
-## Data Sources
+## 📊 Fuentes de Datos
 
-Balón de Oro historical data (winners and nominees 1956-2025) sourced from:
+Datos históricos del Balón de Oro (ganadores y nominados 1956-2025) obtenidos de:
 - [DAZN - Lista de ganadores y palmarés del Balón de Oro](https://www.dazn.com/es-ES/news/f%C3%BAtbol/balon-de-oro-lista-de-ganadores-y-palmares-del-premio-al-mejor-futbolista-del-mundo-de-france-football/yk3dalhzw9tu133fh8hrsrolu)
 
-## Frontend Repository
-[Link to frontend repo](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
+## 🎨 Repositorio del Frontend
+[Enlace al repositorio del cliente](https://github.com/asanabria-2021067/proy1-balon-de-oro-client)
 
-## Swagger run on hosted backend
-[Link to Swagger hosted](https://proy1-balon-de-oro-api.vercel.app/api/docs/)
+## 📖 Swagger en Backend Hosteado
+[Acceder a Swagger en producción](https://proy1-balon-de-oro-api.vercel.app/api/docs/)
