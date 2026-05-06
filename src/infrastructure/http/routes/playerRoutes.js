@@ -5,9 +5,9 @@ const { playerController } = require('../../dependencies');
 const validate = require('../middleware/validate');
 
 const router = express.Router();
-const upload = multer({ 
+const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 1024 * 1024 }, // 1MB
+  limits: { fileSize: 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
